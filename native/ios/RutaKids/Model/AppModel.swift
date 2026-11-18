@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 
 /// Une el puente con Godot, el guardado y las pantallas: qué se muestra y cuándo.
 @Observable

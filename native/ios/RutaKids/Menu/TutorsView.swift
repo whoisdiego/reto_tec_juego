@@ -124,11 +124,7 @@ struct TutorsView: View {
                         .font(.system(size: 12, design: .rounded))
                         .foregroundColor(Color(hex: "534A5E"))
                     if stars > 0 {
-                        Text(infractions.isEmpty
-                             ? L("TUTOR_SIN_FALTAS")
-                             : infractions.sorted { $0.key < $1.key }
-                                .map { "\(ruleName($0.key)): \($0.value)" }
-                                .joined(separator: ", "))
+                        Text(infractionsText(infractions))
                             .font(.system(size: 12, design: .rounded))
                             .foregroundColor(Color(hex: "534A5E"))
                     }
@@ -159,6 +155,16 @@ struct TutorsView: View {
                 .background(Capsule().fill(selected ? Theme.gold : Theme.darkPurple))
         }
         .buttonStyle(ScaleButtonStyle())
+    }
+
+    /// "Alto: 1, Rojo: 2" o "Sin faltas".
+    private func infractionsText(_ infractions: [String: Int]) -> String {
+        if infractions.isEmpty { return L("TUTOR_SIN_FALTAS") }
+        var parts: [String] = []
+        for rule in infractions.keys.sorted() {
+            parts.append("\(ruleName(rule)): \(infractions[rule] ?? 0)")
+        }
+        return parts.joined(separator: ", ")
     }
 
     /// Nombre de la regla (REGLA_STOP, REGLA_RED_LIGHT…). Si no hay texto, se muestra el id.

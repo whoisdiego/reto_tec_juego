@@ -3,6 +3,8 @@
 > **Hay dos apps en este proyecto de Xcode.** `RutaKidsSpike/` es la prueba técnica del puente (pasos de abajo).
 > `RutaKids/` es la app real con el menú nativo: ver la sección "La app RutaKids" al final.
 > Los dos targets se compilan igual (sección 3); en Xcode se elige cuál correr en el selector de arriba.
+> **Para ver el menú de RutaKids elige el esquema `RutaKids`.** Si arriba dice `RutaKidsSpike`, en el iPhone se instala la
+> prueba técnica ("RutaKids spike", la pantalla morada con botones azules) y no el menú. Cada app instalada se abre por separado.
 
 Esta carpeta es la mitad de iOS del spike de `docs/arquitectura.md` (sección 6). La mitad de Android ya pasó en un Samsung Galaxy A15 (`native/android/`). Aquí se prueba lo mismo en un iPhone o iPad **real**:
 

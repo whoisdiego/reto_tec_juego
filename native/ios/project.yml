@@ -42,6 +42,8 @@ targets:
         # Poner aquí el Team ID de la cuenta de Apple de quien compile (o elegirlo en Xcode).
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.0"
+        DEVELOPMENT_LANGUAGE: es
   RutaKidsSpike:
     type: application
     platform: iOS
@@ -69,3 +71,5 @@ targets:
         # Poner aquí el Team ID de la cuenta de Apple de quien compile (o elegirlo en Xcode).
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.0"
+        DEVELOPMENT_LANGUAGE: es

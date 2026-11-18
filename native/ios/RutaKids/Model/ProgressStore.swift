@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 
 /// Resultado de un nivel terminado (evento level_finished del puente).
 struct LevelResult {

@@ -21,7 +21,7 @@ struct RutaKidsApp: App {
 struct RootView: View {
     let app: GodotApp
     let model: AppModel
-    @Environment(\.scenePhase) private var scenePhase
+    @SwiftUI.Environment(\.scenePhase) private var scenePhase
 
     private let secondTimer = Foundation.Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -36,7 +36,7 @@ struct RootView: View {
                 MainMenuView(model: model)
                     // Cualquier toque cuenta como "alguien está usando la pantalla" (kiosco).
                     .simultaneousGesture(
-                        DragGesture(minimumDistance: 0).onChanged { _ in model.touched() }
+                        SwiftUI.DragGesture(minimumDistance: 0).onChanged { _ in model.touched() }
                     )
             }
         }
@@ -47,7 +47,7 @@ struct RootView: View {
         .fullScreenCover(isPresented: .constant(model.store.mode == nil)) {
             AgeSelectView { mode in model.store.setMode(mode) }
         }
-        .sheet(isPresented: Bindable(model).showTutors, onDismiss: { model.tutorsClosed() }) {
+        .sheet(isPresented: SwiftUI.Bindable(model).showTutors, onDismiss: { model.tutorsClosed() }) {
             TutorsView(model: model)
         }
         // Segundo plano y llamadas entrantes: el nivel se pausa y reanuda (sección 4, paso 6).

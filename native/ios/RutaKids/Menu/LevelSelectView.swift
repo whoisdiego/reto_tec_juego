@@ -80,7 +80,7 @@ struct LevelCardView: View {
 
 struct LevelSelectView: View {
     let model: AppModel
-    @Environment(\.dismiss) private var dismiss
+    @SwiftUI.Environment(\.dismiss) private var dismiss
 
     /// Las tarjetas con las estrellas y los candados que dicen el guardado y el modo kiosco.
     private var levels: [Level] {
