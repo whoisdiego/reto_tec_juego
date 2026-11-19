@@ -32,13 +32,17 @@ struct RootView: View {
             })
             .ignoresSafeArea()
 
-            if !model.bridge.playing {
-                MainMenuView(model: model)
-                    // Cualquier toque cuenta como "alguien está usando la pantalla" (kiosco).
-                    .simultaneousGesture(
-                        SwiftUI.DragGesture(minimumDistance: 0).onChanged { _ in model.touched() }
-                    )
-            }
+            // El menú nunca se quita del árbol: mientras hay un nivel abierto solo se esconde.
+            // Así, al salir del nivel, vuelve en la misma pantalla (lista de niveles) y con las
+            // estrellas ya actualizadas, sin volver a armar la navegación.
+            MainMenuView(model: model)
+                // Cualquier toque cuenta como "alguien está usando la pantalla" (kiosco).
+                .simultaneousGesture(
+                    SwiftUI.DragGesture(minimumDistance: 0).onChanged { _ in model.touched() }
+                )
+                .opacity(model.bridge.playing ? 0 : 1)
+                .allowsHitTesting(!model.bridge.playing)
+                .accessibilityHidden(model.bridge.playing)
         }
         .environment(\.godotApp, app)
         .persistentSystemOverlays(.hidden)
