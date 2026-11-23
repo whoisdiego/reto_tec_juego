@@ -12,8 +12,9 @@ struct Level: Identifiable {
 }
 
 // MARK: - Recuadro de nivel
-// Muestra la imagen "imagen_nlX" (trae el número y el dibujo) y, encima, abajo, las
-// estrellas ganadas: llenas las que ya se sacaron, vacías las que faltan.
+// Muestra la imagen "imagen_nlX" (trae el número y el dibujo) y, colgando del borde de
+// abajo, las estrellas ganadas (BevelStars.swift): llenas las que ya se sacaron, apagadas
+// las que faltan. Las estrellas sobresalen un poco, por eso la cuadrícula deja espacio.
 
 struct LevelCardView: View {
     let level: Level
@@ -53,22 +54,18 @@ struct LevelCardView: View {
                     Image(systemName: "lock.fill")
                         .font(.system(size: s * 0.3))
                         .foregroundColor(.white)
-                } else {
-                    // Estrellas ganadas, abajo al centro de la tarjeta.
-                    VStack {
-                        Spacer()
-                        StarsRow(earned: level.stars, size: max(12, s * 0.15))
-                            .padding(.horizontal, s * 0.08)
-                            .padding(.vertical, s * 0.03)
-                            .background(Capsule().fill(Theme.darkPurple.opacity(0.78)))
-                            .padding(.bottom, s * 0.06)
-                    }
-                    .frame(width: s, height: s)
                 }
             }
             .frame(width: s, height: s)
-            .position(x: geo.size.width / 2, y: geo.size.height / 2)
             .shadow(color: Color.black.opacity(0.35), radius: 4, x: 0, y: 3)
+            // Estrellas con bisel (diseño F): cuelgan del borde de abajo de la tarjeta.
+            .overlay(alignment: .bottom) {
+                if !level.isLocked {
+                    LevelStarsArc(earned: level.stars, cardSize: s)
+                        .offset(y: s * LevelStarsArc.boxDrop)
+                }
+            }
+            .position(x: geo.size.width / 2, y: geo.size.height / 2)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(level.id). \(L(String(format: "NIVEL_%02d_NOMBRE", level.id)))")
@@ -129,8 +126,11 @@ struct LevelSelectView: View {
         let availableHeight = size.height - backBarHeight - padding * 3
         let availableWidth  = size.width * 0.90
         let cardByWidth  = (availableWidth  - spacing * CGFloat(columnsCount - 1)) / CGFloat(columnsCount)
-        let cardByHeight = (availableHeight - spacing * CGFloat(rowCount    - 1)) / CGFloat(rowCount)
+        // Cada fila reserva, además, lo que sobresalen las estrellas por abajo.
+        let overhang = LevelStarsArc.overhangRatio
+        let cardByHeight = (availableHeight - spacing * CGFloat(rowCount - 1)) / (CGFloat(rowCount) * (1 + overhang))
         let cardSize = max(60, min(cardByWidth, cardByHeight))
+        let rowGap = spacing + cardSize * overhang
 
         let rows: [[Level]] = stride(from: 0, to: levels.count, by: columnsCount).map {
             Array(levels[$0..<min($0 + columnsCount, levels.count)])
@@ -161,7 +161,7 @@ struct LevelSelectView: View {
             Spacer(minLength: 0)
 
             // ── Cuadrícula de niveles ────────────────────────────────────
-            VStack(spacing: spacing) {
+            VStack(spacing: rowGap) {
                 ForEach(rows.indices, id: \.self) { r in
                     HStack(spacing: spacing) {
                         ForEach(rows[r]) { level in
